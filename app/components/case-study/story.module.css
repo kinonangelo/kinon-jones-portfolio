@@ -1,0 +1,334 @@
+.story {
+  --story-body: 1rem;
+  --story-support: 0.875rem;
+  --story-subheading: 1.25rem;
+  isolation: isolate;
+}
+.story p,
+.story dd {
+  font-size: var(--story-body);
+  line-height: 1.85;
+}
+.story h2 {
+  font-size: clamp(1.875rem, 3vw, 2.5rem);
+  line-height: 1.18;
+  letter-spacing: -0.04em;
+}
+.story h3 {
+  font-size: var(--story-subheading);
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+.story .supporting,
+.story figcaption {
+  font-size: var(--story-support);
+  line-height: 1.65;
+}
+.story :global(.eyebrow),
+.story dt {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.story .desktopNav p,
+.story .chapterLink {
+  font-size: 0.8125rem;
+}
+.storyLayout {
+  display: grid;
+  align-items: start;
+  gap: 0;
+}
+.environment {
+  --scene-background: #f8f8f6;
+  --scene-foreground: #171717;
+  --scene-muted: #525252;
+  --scene-line: #d4d4d4;
+  --scene-active: #eeefed;
+  background-color: var(--scene-background);
+  color: var(--scene-foreground);
+  transition: color 140ms ease-out;
+}
+.environment .navigation {
+  background-color: var(--scene-background);
+  color: var(--scene-foreground);
+  transition: none;
+}
+.environment .chapter,
+.environment .step,
+.environment .mobileNav {
+  border-color: var(--scene-line);
+}
+.environment .chapter p,
+.environment .chapter dd,
+.environment .chapter dt,
+.environment .stickyVisual > div,
+.environment .desktopNav p {
+  color: inherit;
+}
+.environment .chapterLink {
+  color: var(--scene-muted);
+}
+.environment .chapterLink:hover,
+.environment .chapterLink[aria-current] {
+  color: var(--scene-foreground);
+  border-left-color: var(--scene-foreground);
+}
+.environment .chapterLink[aria-current] {
+  background-color: var(--scene-active);
+}
+.environment .progressTrack {
+  background: var(--scene-line);
+}
+.environment .progressTrack span {
+  background: var(--scene-foreground);
+}
+.environment .darkChapter {
+  margin-block: 3rem;
+  border-top: 0;
+}
+.story .conclusion {
+  padding-block: 6rem;
+}
+.story .conclusion > p {
+  border-left: 2px solid currentColor;
+  padding-left: 1.5rem;
+  margin-top: 2rem;
+  opacity: 1;
+}
+.navigation {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #f8f8f6;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+.desktopNav {
+  display: none;
+}
+.mobileNav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-block: 1px solid #d4d4d4;
+  padding-block: 0.5rem;
+}
+.chapter {
+  padding-block: 4rem;
+  border-top: 1px solid #d4d4d4;
+  scroll-margin-top: 5rem;
+}
+.chapter:focus {
+  outline: none;
+}
+.sequence {
+  margin-top: 2rem;
+}
+.stickyVisual {
+  display: none;
+}
+.step {
+  padding-block: 2rem;
+  border-top: 1px solid #d4d4d4;
+}
+.inlineVisual {
+  margin-top: 2rem;
+}
+.inlineVisual img {
+  max-height: 65svh;
+  object-fit: contain;
+}
+/* Masking is an explicit introduction-only presentation, never an asset property. */
+.blendedCad {
+  mask-image:
+    linear-gradient(to right, transparent, black 4%, black 96%, transparent),
+    linear-gradient(to bottom, transparent, black 5%, black 95%, transparent);
+  mask-composite: intersect;
+}
+.progressList {
+  position: relative;
+}
+.progressTrack {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #d4d4d4;
+  pointer-events: none;
+}
+.progressTrack span {
+  display: block;
+  height: 100%;
+  background: #171717;
+  transform-origin: top;
+}
+.stageFigure > div {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stageFigure img {
+  width: 100%;
+  height: clamp(180px, 40svh, 420px);
+  max-height: 420px;
+  object-fit: contain;
+}
+.stageFigure figcaption {
+  margin-top: 0.75rem;
+}
+.unframed > div {
+  background: transparent;
+  padding: 0;
+}
+.assemblyReveal {
+  margin-top: 3rem;
+}
+.revealCopy {
+  opacity: var(--reveal-copy-opacity, 1);
+}
+.revealTrack {
+  margin-top: 2rem;
+}
+.aircraftSurface {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32svh;
+  background: #050505;
+  padding: 2rem 0;
+}
+.revealAircraft {
+  width: 90%;
+  height: auto;
+  max-height: 50svh;
+  object-fit: contain;
+  transform: scale(var(--aircraft-scale, 1));
+  opacity: var(--aircraft-opacity, 1);
+}
+@media (min-width: 1024px) and (min-height: 560px) {
+  .revealTrack {
+    min-height: 75svh;
+  }
+  .revealStage {
+    position: sticky;
+    top: 20svh;
+  }
+  .aircraftSurface {
+    min-height: 50svh;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .revealTrack {
+    min-height: 0;
+  }
+  .revealStage {
+    position: static;
+  }
+  .revealAircraft {
+    transform: none;
+    opacity: 1;
+  }
+}
+.visualLayer[aria-hidden="true"] figcaption {
+  visibility: hidden;
+}
+@media (min-width: 1024px) {
+  .storyLayout {
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: 3rem;
+  }
+  .navigation {
+    top: 2rem;
+    align-self: start;
+    max-height: calc(100svh - 4rem);
+    overflow-y: auto;
+    padding-block: 1rem;
+    z-index: 1;
+  }
+  .desktopNav {
+    display: block;
+  }
+  .mobileNav {
+    display: none;
+  }
+  .chapterLink {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0 0.7rem 0.75rem;
+    border-left: 2px solid transparent;
+    color: #737373;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+  .chapterLink:hover,
+  .chapterLink[aria-current] {
+    color: #171717;
+    border-left-color: #171717;
+  }
+  .chapterLink[aria-current] {
+    font-weight: 500;
+    background: #eeefed;
+  }
+  .chapter {
+    padding-block: 5rem;
+    scroll-margin-top: 2rem;
+  }
+
+}
+@media (min-width: 1024px) and (min-height: 560px) {
+  .sequence {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+    margin-top: 3rem;
+  }
+  .stickyVisual {
+    display: block;
+    position: sticky;
+    top: 2rem;
+    padding-block: 1rem;
+    max-height: calc(100svh - 4rem);
+  }
+  .visualStack {
+    display: grid;
+  }
+  .visualLayer {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  .inlineVisual {
+    display: none;
+  }
+  .step {
+    min-height: 65vh;
+    padding-block: 3rem;
+  }
+  .step:last-child {
+    min-height: 50vh;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .navigation,
+  .chapterLink {
+    transition: none;
+  }
+  .visualLayer {
+    transform: none !important;
+  }
+
+}
+

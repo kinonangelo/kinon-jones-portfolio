@@ -1,0 +1,31 @@
+Music attribution — Microsoft Teams dissertation film and homepage teaser
+
+Track: Style Funk
+Composer/artist: Kevin MacLeod (incompetech.com)
+Artist: https://incompetech.com/
+Catalogue: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100058
+Recording source: https://commons.wikimedia.org/wiki/File:Style_Funk_(ISRC_USUAN1100058).mp3
+Licence: Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+Licence URI: https://creativecommons.org/licenses/by/3.0/
+Legal terms: https://creativecommons.org/licenses/by/3.0/legalcode.en
+
+Changes: music synchronised to the film; continuous excerpt from the original
+recording, with fades and loudness adjustment. No endorsement is implied.
+
+This notice covers the licensed soundtrack, not the entire film or website.
+Keep attribution and the licence URI with any redistribution. When uploading
+the film elsewhere, put this credit in the publicly accessible video description.
+Retain supplied copyright/licence notices and identify adaptations. Do not imply
+endorsement, impose additional restrictions on the licensed music or use DRM to
+prevent the licence's permitted uses.
+
+The supplied recording's CC BY 3.0 licence permits attribution in a manner
+reasonable to the medium; it does not mandate a burned-in video overlay.
+Credits appear beside both website players, in their expandable descriptions,
+in media metadata, and in this linked notice. Metadata alone is not relied on.
+
+Creative Commons attribution guidance:
+https://wiki.creativecommons.org/wiki/Recommended_practices_for_attribution#Publishing_attribution_on_a_separate_web_page
+
+Downloaded source SHA-256:
+5036f27114e79c63d0fddf0c98562cce481b3e36d4de869bc3611b9ef90e4748

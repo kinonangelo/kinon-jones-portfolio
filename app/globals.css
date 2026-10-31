@@ -1,26 +1,150 @@
 @import "tailwindcss";
-
 :root {
-  --background: #ffffff;
+  --background: #f8f8f6;
   --foreground: #171717;
 }
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+::selection {
+  background: #262626;
+  color: #fff;
+}
+section {
+  scroll-margin-top: 32px;
+}
+a,
+summary {
+  -webkit-tap-highlight-color: transparent;
+}
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 6px;
+}
+@layer components {
+  .page-width {
+    @apply mx-auto w-full max-w-[1320px] px-6 sm:px-10 lg:px-16;
+  }
+  .section-space {
+    @apply py-20 sm:py-28;
+  }
+  .eyebrow {
+    @apply text-[10px] font-medium uppercase tracking-[0.18em] sm:text-[11px];
+  }
+  .section-heading {
+    @apply text-4xl leading-[1.13] font-medium tracking-[-0.045em] sm:text-5xl;
+  }
+  .nav-link {
+    @apply py-2 text-neutral-600 transition-colors hover:text-neutral-950;
+  }
+  .nav-link-active {
+    @apply text-neutral-950 underline decoration-neutral-400 underline-offset-8;
+  }
+  .page-heading {
+    @apply text-[clamp(2.6rem,5.6vw,5.5rem)] leading-[1.07] font-medium tracking-[-0.055em];
+  }
+  .button {
+    @apply inline-flex min-h-12 items-center justify-center gap-6 border px-5 py-3 text-sm transition-colors sm:px-6;
+  }
+  .button-primary {
+    @apply border-neutral-950 bg-neutral-950 text-white hover:border-neutral-700 hover:bg-neutral-700;
+  }
+  .button-secondary {
+    @apply border-neutral-400 text-neutral-950 hover:border-neutral-950 hover:bg-neutral-100;
+  }
+  .button-light {
+    @apply border-white bg-white text-neutral-950 hover:border-neutral-200 hover:bg-neutral-200;
+  }
+  .button-outline-light {
+    @apply border-neutral-600 text-white hover:border-white hover:bg-neutral-800;
+  }
+}
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 50;
+  transform: translateY(-160%);
+  background: #171717;
+  color: white;
+  padding: 12px 20px;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+.hero-name {
+  font-size: clamp(3.1rem, 6.2vw, 6rem);
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: -0.06em;
+}
+.portrait-wrap {
+  width: 100%;
+  max-width: 540px;
+  margin-inline: auto;
+  min-width: 0;
+  /* Crop the seated portrait above the lower body, preserving the jacket hand. */
+  aspect-ratio: 0.85;
+  mix-blend-mode: multiply;
+}
+.portrait-fade {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  mask-image:
+    linear-gradient(to right, transparent, black 9%, black 92%, transparent),
+    linear-gradient(to bottom, transparent, black 7%, black 96%, transparent);
+  mask-composite: intersect;
+}
+.portrait-image {
+  position: absolute;
+  width: 122%;
+  max-width: none;
+  height: auto;
+  left: -15%;
+  top: -10%;
+}
+.project-drawing {
+  aspect-ratio: 1.6;
+}
+.project-drawing .engineering-drawing {
+  transition: transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+article:hover .engineering-drawing {
+  transform: scale(1.04);
+}
+.hero-enter {
+  animation: enter 900ms both cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

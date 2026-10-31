@@ -1,0 +1,79 @@
+.intro { display: grid; gap: 2.5rem; }
+.intro > :first-child { align-self: start; }
+.flow { margin-top: 3rem; }
+.rail { display: none; }
+.text { min-width: 0; max-width: 75ch; font-size: 1rem; line-height: 2; color: #525252; }
+.text > [data-reading-group] + [data-reading-group] { margin-top: 4rem; }
+.text > [data-reading-group] > p + p { margin-top: 1.5rem; }
+.waypoint {
+  margin-bottom: 1.5rem;
+  color: #737373;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+}
+.sequence { margin-top: 1.25rem; color: #737373; font-size: 11px; line-height: 1.8; }
+.followingLink { margin-top: 2rem; }
+
+/* Only the About page's closing CTA receives these spacing overrides. */
+.closing :global(.section-space) { padding-block: 2rem; gap: 2rem; }
+.closing :global(.section-space) > :first-child { align-self: start; }
+.closing :global(.section-space) > div > p { margin-top: 1.25rem; margin-bottom: 1.5rem; }
+.closing :global(.section-space) > div > a { margin-top: 1.5rem; }
+
+@media (min-width: 1024px) {
+  .intro, .flow[data-enhanced] {
+    display: grid;
+    grid-template-columns: minmax(0, 32fr) minmax(0, 68fr);
+    column-gap: 2.5rem;
+  }
+  .flow { margin-top: 4rem; }
+  .flow[data-enhanced] .rail { display: block; }
+  .sticky { position: sticky; top: clamp(7rem, 30vh, 20rem); display: grid; }
+  .stage {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 550ms ease, transform 550ms ease;
+    pointer-events: none;
+    color: #737373;
+    font-size: clamp(2rem, 3.1vw, 3rem);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -.045em;
+    text-transform: uppercase;
+    white-space: pre-line;
+  }
+  .stage[data-active="true"] { opacity: 1; transform: none; }
+  .process .stage { color: #262626; }
+  .underline {
+    display: block;
+    width: 4rem;
+    height: 1px;
+    margin-top: 1.5rem;
+    background: #a3a3a3;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 550ms ease;
+  }
+  .stage[data-active="true"] .underline { transform: scaleX(1); }
+  .text > [data-reading-group] + [data-reading-group] { margin-top: 6rem; }
+  .flow[data-enhanced] .waypoint {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .followingLink { margin-left: calc((100% - 2.5rem) * .32 + 2.5rem); }
+  .closing :global(.section-space) { grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage, .underline { transform: none; transition: none; }
+}

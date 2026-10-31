@@ -1,0 +1,4 @@
+/* Keep the small supplied workshop photograph close to its native resolution. */
+.workshop :global(#contribution) figure {
+  max-width: 20rem;
+}
