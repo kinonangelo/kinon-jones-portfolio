@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, open, readFile } from "node:fs/promises";
 import path from "node:path";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export const runtime = "nodejs";
 
@@ -8,12 +9,21 @@ const consentText =
   "I’m happy for Kinon to contact me regarding relevant opportunities or to follow up on my CV request.";
 
 export async function POST(request: Request) {
+  let cloudflare: CloudflareEnv | undefined;
+  try {
+    cloudflare = getCloudflareContext().env;
+  } catch {
+    // Plain `next dev` / `next start` retains the existing local storage.
+  }
   const headers = { "Cache-Control": "no-store" };
   const fail = (message: string, status: number) =>
     Response.json({ error: message }, { status, headers });
 
   const origin = request.headers.get("origin");
-  if (origin && origin !== new URL(request.url).origin) {
+  // OpenNext can normalise the internal Next request URL. Use the original
+  // Worker URL, supplied by our entry point rather than a client header.
+  const requestOrigin = cloudflare?.CV_REQUEST_ORIGIN ?? new URL(request.url).origin;
+  if (origin && origin !== requestOrigin) {
     return fail("Please submit this form from the portfolio website.", 403);
   }
   if (!request.headers.get("content-type")?.startsWith("application/json")) {
@@ -92,44 +102,63 @@ export async function POST(request: Request) {
   }
 
   try {
-    const pdf = await readFile(
-      path.join(process.cwd(), "private/cv/kinon-jones-cv.pdf"),
-    );
-    // Use a persistent private volume on a deployed Node server. Fail closed
-    // rather than using ephemeral storage on common serverless platforms.
-    if (
-      (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) &&
-      !process.env.CV_REQUESTS_DIR
-    ) {
-      throw new Error("Persistent request storage is not configured");
-    }
-    const directory =
-      process.env.CV_REQUESTS_DIR ||
-      path.join(process.cwd(), "private/requests");
-    await mkdir(directory, { recursive: true, mode: 0o700 });
-    const file = await open(
-      path.join(directory, "cv-requests.jsonl"),
-      "a",
-      0o600,
-    );
-    try {
-      await file.writeFile(
-        JSON.stringify({
-          id: randomUUID(),
-          requestedAt: new Date().toISOString(),
-          firstName,
-          lastName,
-          email,
-          company,
-          role,
-          contactConsent: input.consent === true,
-          consentText,
-          privacyNoticeVersion: "2026-09-27",
-        }) + "\n",
+    const record = {
+      id: randomUUID(),
+      requestedAt: new Date().toISOString(),
+      firstName,
+      lastName,
+      email,
+      company,
+      role,
+      contactConsent: input.consent === true,
+      consentText,
+      privacyNoticeVersion: "2026-09-27",
+    };
+    let pdf: ArrayBuffer | Uint8Array<ArrayBuffer>;
+    if (cloudflare) {
+      if (!cloudflare.CV_REQUESTS || !cloudflare.CV_PDF) {
+        throw new Error("Private CV storage is not configured");
+      }
+      pdf = cloudflare.CV_PDF;
+      const saved = await cloudflare.CV_REQUESTS.prepare(
+        `INSERT INTO cv_requests
+          (id, requested_at, first_name, last_name, email, company, role,
+           contact_consent, consent_text, privacy_notice_version)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ).bind(
+        record.id, record.requestedAt, firstName, lastName, email, company, role,
+        record.contactConsent ? 1 : 0, consentText, record.privacyNoticeVersion,
+      ).run();
+      if (!saved.success) throw new Error("CV request could not be saved");
+    } else {
+      pdf = await readFile(
+        path.join(process.cwd(), "private/cv/kinon-jones-cv.pdf"),
       );
-      await file.sync();
-    } finally {
-      await file.close();
+      // Use a persistent private volume on a deployed Node server. Fail closed
+      // rather than using ephemeral storage on common serverless platforms.
+      if (
+        (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) &&
+        !process.env.CV_REQUESTS_DIR
+      ) {
+        throw new Error("Persistent request storage is not configured");
+      }
+      const directory =
+        process.env.CV_REQUESTS_DIR ||
+        path.join(process.cwd(), "private/requests");
+      await mkdir(directory, { recursive: true, mode: 0o700 });
+      const file = await open(
+        path.join(directory, "cv-requests.jsonl"),
+        "a",
+        0o600,
+      );
+      try {
+        await file.writeFile(
+          JSON.stringify(record) + "\n",
+        );
+        await file.sync();
+      } finally {
+        await file.close();
+      }
     }
     return new Response(pdf, {
       headers: {

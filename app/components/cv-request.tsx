@@ -59,7 +59,7 @@ export function CvRequest() {
         }),
       });
       if (!response.ok) {
-        const result = await response.json();
+        const result = (await response.json()) as { error?: string };
         throw new Error(result.error || "Please try again shortly.");
       }
       const url = URL.createObjectURL(await response.blob());

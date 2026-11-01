@@ -19,6 +19,27 @@ Get-Content -LiteralPath 'private/requests/cv-requests.jsonl' |
 
 ## Hosting
 
+### Cloudflare Workers
+
+On Cloudflare, the same endpoint writes to the private `CV_REQUESTS` D1 database
+using a parameterised insert. It returns the unchanged PDF only after that write
+succeeds. The PDF is bundled as a private binary Worker module, outside public
+assets. Apply the migrations in `cloudflare/migrations` before deployment.
+
+Review requests in the Cloudflare dashboard's D1 console for
+`kinon-jones-cv-requests`:
+
+```sql
+SELECT requested_at, first_name, last_name, email, company, role, contact_consent
+FROM cv_requests ORDER BY requested_at DESC;
+```
+
+Do not publish query exports or commit them. The database has no public read API.
+Only follow up where `contact_consent = 1`. Owner-managed retention still applies.
+See [Cloudflare deployment](cloudflare-deployment.md) for binding and build setup.
+
+### Local development / standalone Node
+
 This first version uses a Node server with a writable, persistent private directory. Set `CV_REQUESTS_DIR` to an absolute directory on persistent storage for deployment, restrict access to the site owner, and back it up appropriately. Do not point it at `public`, a public bucket, a shared folder, or ephemeral `/tmp` storage. Never commit request records.
 
 Serverless/read-only deployments need a durable storage adapter before this feature is deployed there. A directory environment variable alone does not make ephemeral storage persistent. The endpoint fails rather than silently dropping requests when storage is unavailable; common serverless environments without an explicit storage configuration are rejected. It does not return the PDF if saving fails.

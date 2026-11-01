@@ -16,6 +16,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kinonjones.uk"),
+  alternates: { canonical: "./" },
+  openGraph: {
+    type: "website",
+    url: "./",
+    siteName: profile.name,
+    images: [{ url: "/images/portrait.webp", alt: profile.name }],
+  },
+  twitter: { card: "summary" },
   title: {
     default: `${profile.name} | Aerospace Engineering`,
     template: `%s | ${profile.name}`,

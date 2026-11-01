@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kinon-jones-portfolio",
+  "account_id": "d0153f26a46d151dd11f29c64916c318",
+  "main": "cloudflare/worker.ts",
+  "compatibility_date": "2026-10-29",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "images": { "binding": "IMAGES" },
+  "rules": [{ "type": "Data", "globs": ["**/*.pdf"], "fallthrough": true }],
+  "d1_databases": [{
+    "binding": "CV_REQUESTS",
+    "database_name": "kinon-jones-cv-requests",
+    "database_id": "9ad71257-21b0-4912-8c43-4238387d03dd",
+    "migrations_dir": "cloudflare/migrations"
+  }]
+}
